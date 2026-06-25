@@ -1,0 +1,7 @@
+services:
+  nextcloud_db:
+    image: mariadb
+    restart: unless-stopped
+    container_name: nexcloud_db
+    volumes:
+      - /home/david/nexcloud-project/mariadb-data:/var/lib/mysql
