@@ -2,6 +2,19 @@ services:
   nextcloud_db:
     image: mariadb
     restart: unless-stopped
-    container_name: nexcloud_db
+    container_name: nextcloud_db
     volumes:
-      - /home/david/nexcloud-project/mariadb-data:/var/lib/mysql
+      - /home/david/nextcloud-project/mariadb-data:/var/lib/mysql
+
+  nextcloud_web:
+    image: httpd
+    restart: unless-stopped
+    container_name: nextcloud_web
+
+  nextcloud:
+    image: nextcloud
+    restart: unless-stopped
+    container_name: nextcloud
+    volumes:
+      - /home/david/nextcloud-project/nextcloud:/var/www/html
+      - /media/ext-storage/nextcloud-data:/var/www/html/data
