@@ -3,8 +3,13 @@ services:
     image: mariadb
     restart: unless-stopped
     container_name: nextcloud_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
     volumes:
-      - /home/david/nextcloud-project/mariadb-data:/var/lib/mysql
+      - ./mariadb-data:/var/lib/mysql
 
   nextcloud_web:
     build: ./apache
@@ -15,9 +20,16 @@ services:
         - ./apache/config/modsecurity-custom.conf:/etc/apache2/mods-available/security2.conf:ro
 
   nextcloud:
-    image: nextcloud
+    image: nextcloud:fpm
     restart: unless-stopped
     container_name: nextcloud
+    environment:
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_HOST=nextcloud_db
     volumes:
-      - /home/david/nextcloud-project/nextcloud:/var/www/html
+      - ./nextcloud:/var/www/html
       - /media/ext-storage/nextcloud-data:/var/www/html/data
+    depends_on:
+      - nextcloud_db
