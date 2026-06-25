@@ -7,9 +7,12 @@ services:
       - /home/david/nextcloud-project/mariadb-data:/var/lib/mysql
 
   nextcloud_web:
-    image: httpd
+    build: ./apache
     restart: unless-stopped
-    container_name: nextcloud_web
+    container_name: nexcloud_web
+    volumes:
+        - ./apache/config/security.conf:/etc/apache2/conf-available/security.conf:ro
+        - ./apache/config/modsecurity-custom.conf:/etc/apache2/mods-available/security2.conf:ro
 
   nextcloud:
     image: nextcloud
