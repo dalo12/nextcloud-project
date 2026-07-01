@@ -3,21 +3,25 @@ services:
     image: mariadb
     restart: unless-stopped
     container_name: nextcloud_db
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_PASSWORD=${DB_USER_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
     volumes:
-      - ./mariadb-data:/var/lib/mysql
+      - ./mariadb:/var/lib/mysql
 
   nextcloud_web:
     build: ./apache
     restart: unless-stopped
-    container_name: nexcloud_web
+    container_name: nextcloud_web
+    ports:
+      - "80:80"
     volumes:
-        - ./apache/config/security.conf:/etc/apache2/conf-available/security.conf:ro
-        - ./apache/config/modsecurity-custom.conf:/etc/apache2/mods-available/security2.conf:ro
+      - ./nextcloud:/var/www/html
+      - ./apache/sites-enabled/nextcloud.conf:/etc/apache2/sites-enabled/000-default.conf:ro 
 
   nextcloud:
     image: nextcloud:fpm
@@ -28,8 +32,5 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
       - MYSQL_HOST=nextcloud_db
-    volumes:
-      - ./nextcloud:/var/www/html
-      - /media/ext-storage/nextcloud-data:/var/www/html/data
     depends_on:
       - nextcloud_db

@@ -8,6 +8,9 @@ RUN apt update && apt install -y \
 # Enable required Apache modules
 RUN a2enmod proxy proxy_fcgi rewrite headers security2 env setenvif dir mime
 
+COPY ./config/security.conf /etc/apache2/conf-available/security.conf
+COPY ./config/modsecurity-custom.conf /etc/apache2/mods-available/security2.conf
+
 # Enable the hardening config
 RUN a2enconf security
 
