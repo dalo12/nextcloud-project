@@ -27,6 +27,8 @@ services:
     image: nextcloud:fpm
     restart: unless-stopped
     container_name: nextcloud
+    ports:
+      - "9000:9000"
     environment:
       - MYSQL_PASSWORD=${DB_USER_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
