@@ -22,6 +22,9 @@ services:
     volumes:
       - ./nextcloud:/var/www/html
       - ./apache/sites-enabled/nextcloud.conf:/etc/apache2/sites-enabled/000-default.conf:ro 
+      - /media/ext-storage/nextcloud_files:/var/www/html/data
+    depends_on:
+      - nextcloud
 
   nextcloud:
     image: nextcloud:fpm
@@ -34,5 +37,12 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
       - MYSQL_HOST=nextcloud_db
+    volumes:
+      - ./nextcloud:/var/www/html
+      - /media/ext-storage/nextcloud_files:/var/www/html/data
     depends_on:
       - nextcloud_db
+
+volumes:
+  nextcloud:
+  mariadb:
