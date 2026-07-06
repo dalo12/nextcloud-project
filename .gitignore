@@ -1,3 +1,4 @@
 nextcloud/*
 mariadb/*
 .env
+apache/ssl/*

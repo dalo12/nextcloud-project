@@ -19,6 +19,7 @@ services:
     container_name: nextcloud_web
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nextcloud:/var/www/html
       - ./apache/sites-enabled/nextcloud.conf:/etc/apache2/sites-enabled/000-default.conf:ro 
